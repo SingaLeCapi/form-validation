@@ -12,6 +12,9 @@ form.addEventListener('submit', (e) => {
     e.preventDefault();
     // Checking form inputs for appropriate validation
     checkRequired(inputs)
+    checkLength(username, 5, 25);
+    checkLength(password, 8, 20);
+    isValidEmail(email);
 });
 
 // Refactoring the Code
@@ -52,34 +55,17 @@ function checkLength(input, min, max){
     }
 }
 
-function validateForm(){
-    // Extracting error messages ids
-    const usernameError = document.getElementById('username-error');
-    const passwordError = document.getElementById('password-error');
-    const emailError = document.getElementById('email-error');
-    const confirmPasswordError = document.getElementById('confirmPassword-error');
+// Implementing Password matching
+function checkPassword(input1, input2){
+    if(input1.value === input2.value) showError(`Password must match ${input1.value}`);
+}
 
-    // Reseting Error messages
-    usernameError.textContent = '';
-    passwordError.textContent = '';
-    emailError.textContent = '';
-    confirmPasswordError.textContent = '';
-
-    // Validating the username
-    if(username === '' || username.length < 3 ){
-        usernameError.textContent += 'Username must be at least 3 characters long';
-        return;
-    }
-
-    // Validating inputted email
-    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,6}$/;
-    if(!emailPattern.test(email)){
-        emailError.textContent += 'Email not valid';
-        return;
-    }
-
-    //Validating the password
-    if(password === '' || password.length < 8){
-        passwordError.textContent += 'Password must be at least 8 characters long';
+// Implementing Email validation
+function isValidEmail(input){
+    const re = /^[a-zA-Z0-9.-_]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,6}$/
+    if(re.test(input.value)){
+        showSuccess(input)
+    } else {
+        showError(input, `${input.value} is not a valid email`);
     }
 }
